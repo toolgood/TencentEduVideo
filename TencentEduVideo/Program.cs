@@ -15,6 +15,7 @@ namespace TencentEduVideo
     {
         static void Main(string[] args)
         {
+            //var files = Directory.GetFiles(@"E:\C#软谋", "*.sqlite", SearchOption.TopDirectoryOnly);
             var files = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.sqlite", SearchOption.TopDirectoryOnly);
             foreach (var file in files) {
                 Console.WriteLine("当前文件：" + file);
@@ -32,7 +33,7 @@ namespace TencentEduVideo
             var keys = list[1].value;
             //var t = Encoding.UTF8.GetString(list[0].value);
 
-            Dictionary<int, caches> dict = new Dictionary<int, caches>();
+            Dictionary<long, caches> dict = new Dictionary<long, caches>();
             for (int i = 0; i < list.Count; i++) {
                 if (list[i].key.StartsWith("https://ke.qq.com")) {
                     var db = helper.FirstOrDefault<caches>("select * from  caches where key=@0", list[i].key);
@@ -40,7 +41,7 @@ namespace TencentEduVideo
                 }
                 var k = GetQueryString(list[i].key, "start");
                 if (string.IsNullOrWhiteSpace(k) == false) {
-                    dict[int.Parse(k)] = list[i];
+                    dict[long.Parse(k)] = list[i];
                 }
             }
 
@@ -62,7 +63,7 @@ namespace TencentEduVideo
         /// </summary>
         /// <param name="encrypted"></param>
         /// <returns></returns>
-        static byte[] AesDecypt(byte[] keyBytes, byte[] bytes, int start)
+        static byte[] AesDecypt(byte[] keyBytes, byte[] bytes, long start)
         {
             var t = 411785983 - 411019120;
             using (RijndaelManaged cipher = new RijndaelManaged()) {
